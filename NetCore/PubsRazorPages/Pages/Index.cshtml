@@ -1,0 +1,17 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row" style="margin-top:20px">
+    <div class="col-md-4">
+        <a asp-page="/Authors/Index" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-pencil"></span> Authors</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-page="/Publishers/Index" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-user"></span> Publishers</a>
+    </div>
+    <div class="col-md-4">
+        <a asp-page="/Titles/Index" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-book"></span> Titles</a>
+    </div>
+</div>

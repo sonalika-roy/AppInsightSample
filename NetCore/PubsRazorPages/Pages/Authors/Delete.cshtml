@@ -1,0 +1,67 @@
+@page
+@model PubsRazorPages.Pages.Authors.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Author";
+}
+
+<div>
+    <h4>Are you sure you want to delete this author?</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.Address)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.Address)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.State)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.State)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.PostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.PostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.HasContract)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author.HasContract)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Author.AuthorID" />
+        <input type="submit" value="Delete" class="btn btn-primary" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

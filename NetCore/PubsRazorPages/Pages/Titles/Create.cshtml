@@ -1,0 +1,229 @@
+@page
+@model PubsRazorPages.Pages.Titles.CreateModel
+
+@{
+    ViewData["Title"] = "Create Title";
+}
+
+<h4>Create Title</h4>
+<hr />
+        <form method="post">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Title.TitleID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.TitleID" class="form-control" />
+                <span asp-validation-for="Title.TitleID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.BookTitle" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.BookTitle" class="form-control" />
+                <span asp-validation-for="Title.BookTitle" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.Type" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.Type" class="form-control" />
+                <span asp-validation-for="Title.Type" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.PublisherID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="Title.PublisherID" class="form-control" asp-items="@Model.PublisherList"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" style="padding-top:0"><button id="btnChooseAuthors" type="button" class="btn btn-default" data-toggle="modal" data-target="#authorModal">Author(s)</button></label>
+            <div class="col-md-10">
+                @{
+                    string authors = string.Empty;
+                    if (Model.Title.Authors != null)
+                    {
+                        foreach (PubsRepository.Models.TitleAuthor author in Model.Title.Authors)
+                        {
+                            if (!string.IsNullOrEmpty(authors))
+                            {
+                                authors = string.Format("{0},", authors);
+                            }
+                            authors = string.Format("{0}{1} ({2})", authors, author.Author.Name, author.AuthorID);
+                        }
+                    }
+                    <input type="text" readonly id="txtAuthors" name="txtAuthors" class="form-control" value="@authors" />
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Title.Price" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.Price" class="form-control" />
+                <span asp-validation-for="Title.Price" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.Advance" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.Advance" class="form-control" />
+                <span asp-validation-for="Title.Advance" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.Royalty" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.Royalty" class="form-control" />
+                <span asp-validation-for="Title.Royalty" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.YearToDateSales" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.YearToDateSales" class="form-control" />
+                <span asp-validation-for="Title.YearToDateSales" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.Notes" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.Notes" class="form-control" />
+                <span asp-validation-for="Title.Notes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Title.PublishDate" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <input asp-for="Title.PublishDate" class="form-control datepicker" />
+                <span asp-validation-for="Title.PublishDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="authorModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Authors</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="radio" name="rdoSearchType" value="name" checked /> Search by Name<br />
+                            <input type="radio" name="rdoSearchType" value="id" /> Search by ID
+                        </div>
+                        <div class="col-md-5">
+                            <input id="txtSearchLastName" type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-4"><button id="btnSearchAuthor" class="btn btn-default pull-left">Search</button></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-5">
+                            <div id="pnlAuthors"></div>
+                        </div>
+                        <div class="col-md-4" style="height:300px">
+                            <ul id="lstAuthors" class="list-group">
+                                @if (Model.Title.Authors != null)
+                                {
+                                    @foreach (PubsRepository.Models.TitleAuthor author in Model.Title.Authors)
+                                    {
+                                        <li class="list-group-item"><input type="checkbox" id="author-@author.AuthorID" name="author-@author.AuthorID" checked /> @author.Author.Name (@author.AuthorID)</li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script language="javascript" type="text/javascript">
+        function selectAuthor(event, author) {
+            event.preventDefault(); // prevent button click from submitting the form
+            if (author != '') {
+                var authorIDStart = author.indexOf('(');
+                var authorIDEnd = author.indexOf(')');
+                if (authorIDStart > 0
+                    && authorIDEnd > 0) {
+                    var authorID = author.substring(authorIDStart + 1, authorIDEnd);
+                    if ($('#author-' + authorID).length == 0) {
+                        var authorCheckbox = '<input type="checkbox" id="author-' + authorID + '" name="author-' + authorID + '" checked /> ' + author;
+                        $("#lstAuthors").append('<li class="list-group-item">' + authorCheckbox + '</li>');
+                    }
+                }
+            }
+        }
+
+        function searchAuthor(startRow) {
+            var searchType = $("input[name='rdoSearchType']:checked").val();
+            var ajaxUrl = '/api/authors/bylastname/';
+            var searchTerm = $('#txtSearchLastName').val();
+            var numberOfRows = 3;
+
+            if (searchType == 'id') {
+                ajaxUrl = '/api/authors/byid/';
+            }
+
+            $.ajax({
+                url: ajaxUrl + searchTerm + '?startRow=' + startRow + '&numberOfRows=' + numberOfRows,
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+                    $('#pnlAuthors').html(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log('error', textStatus, errorThrown);
+                }
+            });
+        }
+
+        // Initialize application after all scripts are ready
+        $(document).ready(function ($) {
+            $(".datepicker").datepicker();
+
+            $('#btnSearchAuthor').on('click', function (event) {
+                event.preventDefault(); // prevent button click from submitting the form
+                searchAuthor(1);
+            });
+
+            $('#authorModal').on('hide.bs.modal', function () {
+                $('#txtSearchLastName').val('');
+                $('#pnlAuthors').html('');
+                $('#txtAuthors').val('');
+                $('#lstAuthors li').each(function (i, li) {
+                    var authorCheckbox = $(li).contents()[0];
+                    var author = $(li).contents()[1];
+                    if ($(authorCheckbox).is(':checked')) {
+                        if ($('#txtAuthors').val() != '') {
+                            $('#txtAuthors').val($('#txtAuthors').val() + ",");
+                        }
+                        $('#txtAuthors').val($('#txtAuthors').val() + $(author).text());
+                    }
+                    else {
+                        $(li).remove();
+                    }
+                });
+            });
+        });
+    </script>
+}

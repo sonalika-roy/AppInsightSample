@@ -1,0 +1,93 @@
+@page
+@model PubsRazorPages.Pages.Titles.IndexModel
+
+@{
+    ViewData["Title"] = "Titles";
+}
+
+<div class="row" style="margin-top:10px">
+    <div class="col-md-10"><h4 style="display:inline">Titles</h4></div>
+    <div class="col-md-2"><a asp-page="./Create" class="btn btn-primary">Create</a></div>
+</div>
+<hr />
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-success" role="alert">@Model.Message</div>
+}
+<table class="table table-bordered table-condensed table-striped table-responsive">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>YTD Sales</th>
+            <th>Date Published</th>
+            <th>Publisher</th>
+            <th>Authors</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Titles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @if (item.Price.HasValue)
+                {
+                        @item.Price.Value.ToString("c")
+                    }
+                </td>
+                <td>
+                    @if (item.YearToDateSales.HasValue)
+                {
+                        @item.YearToDateSales.Value.ToString("n0")
+                    }
+                </td>
+                <td>
+                    @item.PublishDate.ToShortDateString()
+                </td>
+                <td>
+                    @if (item.Publisher != null)
+                {
+                        @item.Publisher.Name
+
+                    }
+                </td>
+                <td nowrap="nowrap">
+                    @if (item.Authors.Count > 0)
+                {
+                    var authors = item.Authors.ToList();
+                    Write(authors[0].Author.Name);
+                    if (item.Authors.Count > 1)
+                    {
+                        string authorList = string.Empty;
+                        foreach (PubsRepository.Models.TitleAuthor author in authors)
+                        {
+                            authorList = authorList + string.Format("{0}<br/>", author.Author.Name);
+                        }
+                        <button class="btn btn-default btn-sm" onclick="appInsights.trackEvent('ExpandAuthors', {TitleID: '@item.TitleID'});" data-content="@authorList" data-html="true" data-toggle="popover" data-trigger="focus" title="Authors">...</button>
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.TitleID"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="bottom" title="Edit"></span></a>
+                    <a asp-page="./Delete" asp-route-id="@item.TitleID"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="bottom" title="Delete"></span></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script language="javascript" type="text/javascript">
+        // Initialize application after all scripts are ready
+        $(document).ready(function ($) {
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+}
