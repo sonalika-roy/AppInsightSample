@@ -1,0 +1,28 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'srpipelines'
+    appType: 'webAppContainer'
+    WebAppName: 'srpcolinuxcontainer'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'pcodemo'
+    SlotName: 'production'
+    DockerNamespace: 'sracrdemo4.azurecr.io'
+    DockerRepository: 'dockerapp'
+
