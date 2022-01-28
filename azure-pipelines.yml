@@ -19,7 +19,7 @@ steps:
     ConnectionType: 'AzureRM'
     azureSubscription: 'srpipelines'
     appType: 'webAppContainer'
-    WebAppName: 'srpcolinuxcontainer'
+    WebAppName: 'srtestpco2'
     deployToSlotOrASE: true
     ResourceGroupName: 'pcodemo'
     SlotName: 'production'
